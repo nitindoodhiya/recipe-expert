@@ -29,10 +29,11 @@ async def process_url(request: Request):
 
         if not url:
             raise HTTPException(status_code=400, detail="URL not provided in the request body")
-        # transcribe = Transcribe()
-        # transcript = Transcribe.transcribe(transcribe, url)
-        transcript = "Hello"
+        transcribe = Transcribe()
+        transcript = Transcribe.transcribe(transcribe, url)
+        print(transcript)
         response = getInstructions(transcript)
+        print(response)
         return {"response": response}
 
     except Exception as e:
