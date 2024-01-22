@@ -1,5 +1,6 @@
-# recipe-expert
+# Recipe-expert
 
+A platform to concise and summarise the steps of any Cooking Video present on YouTube.
 
 
 ## Requirements
