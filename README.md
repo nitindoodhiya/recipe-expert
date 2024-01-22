@@ -5,6 +5,7 @@ A platform to concise and summarise the steps of any Cooking Video present on Yo
 
 ## Requirements
 - python3
+- nodejs, version >= 14
 - ytDlp
 - deepgram
 - deepgram & openAI api Keys
