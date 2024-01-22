@@ -10,7 +10,7 @@
 
 ## Start the app
 - Expose public/audios/ folder in and use as the host url 
-`uvicorn main:app --reload`
+- start the app `uvicorn main:app --reload`
 
 
 ## Access the app
