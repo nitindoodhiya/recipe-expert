@@ -2,7 +2,7 @@ from deepgram import DeepgramClient, PrerecordedOptions
 import yt_dlp as ytDlp
 from datetime import datetime
 
-HOST_URL = "https://0b6a-171-50-224-17.ngrok-free.app/public/audios/"
+HOST_URL = "https://5a90-171-50-224-17.ngrok-free.app/public/audios/"
 DEEPGRAM_API_KEY = ""
 
 class Transcribe:
@@ -18,10 +18,9 @@ class Transcribe:
             audioUrl = {
                 "url": url
             }
-
             response = deepgram.listen.prerecorded.v('1').transcribe_url(audioUrl, options) 
             return response
-        except Exception as e: 
+        except Exception as e:
             print(f'Exception: {e}') 
 
     def downloadAudioFromYoutube(self, url):
@@ -38,13 +37,11 @@ class Transcribe:
 
         with ytDlp.YoutubeDL(options) as ydl:
             infoDict = ydl.extract_info(url, download=True)
-
         return filename
 
     def transcribe(self, videoUrl):
         try:
             downloadedFile = self.downloadAudioFromYoutube(videoUrl)
-            print(f"Audio downloaded to: {downloadedFile}")
             url = HOST_URL + downloadedFile
             response = self.deepgramTranscribe(url)
             return response.results.channels[0].alternatives[0].transcript
@@ -52,5 +49,3 @@ class Transcribe:
         except Exception as e:
             print(f'Exception: {e}')
             return None
-
-        

@@ -26,16 +26,14 @@ async def process_url(request: Request):
     try:
         data = await request.json()
         url = data.get("url")
-
         if not url:
             raise HTTPException(status_code=400, detail="URL not provided in the request body")
         transcribe = Transcribe()
         transcript = Transcribe.transcribe(transcribe, url)
-        print(transcript)
-        response = getInstructions(transcript)
-        print(response)
+        response = await getInstructions(transcript)
         return {"response": response}
 
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 

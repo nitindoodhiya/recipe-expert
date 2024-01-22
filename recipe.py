@@ -4,17 +4,21 @@ import json
 OPENAI_API_KEY = ""
 
 prompt_init = """in the context of the food recipe here is a person describing how to create this recipe,  can you provide what is he/ she preparing and also get the scenes for replicating the steps? from the below description.
-give an explanation for each step, follow the heading and body structure
-if there are multiple steps in a single step use arrays in the output json
+give an explanation for each step, follow the given valid output JSON structure for heading and body structure
 {
-"title": "name of the dish"
-"description": "describe about the recipe"
+    "title": "name of the dish",
+    "description": "describe about the recipe",
+    "instructions":[
+        {
+            "heading": "blah blah",
+            "body": {
+                "highlights": "highlight of this step, keep it about than 10 words not less than 5 words",
+                "explanation": "Elaborate in more than 50 words",
+            },
+        },
+    ],
+};
 
-"instructions":[ { "heading": "blah blah",
-  "body":  {"highlights": "highlight of this step, keep it about than 10 words not less than 5 words",
-"explanation":" Elaborate in more than 50 words" 
-}]
-}"
 here is the description:
 """
 url = "https://api.openai.com/v1/chat/completions"
@@ -23,25 +27,24 @@ headers = {
     "Authorization": "Bearer " + OPENAI_API_KEY  # Replace with your actual API key
 }
 
-def getInstructions(transcript):
+async def getInstructions(transcript):
     prompt = prompt_init + "\n" + transcript 
     data = {
         "model": "gpt-3.5-turbo",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7
     }
+    try:
+        response = requests.post(url, json=data, headers=headers)
+        if response.status_code == 200:
+            response_data = response.json()
 
-    response = requests.post(url, json=data, headers=headers)
-
-    if response.status_code == 200:
-        # Parse the JSON response
-        response_data = response.json()
-
-        # Print the parsed data
-        response_str = response_data['choices'][0]['message']['content']
-        response_json = json.loads(response_str)
-        return response_json
-    else:
-        # Print an error message if the request was not successful
-        print(f"Error: {response.status_code}, {response.text}")
-        return None
+            response_str = response_data['choices'][0]['message']['content']
+            response_json = json.loads(response_str)
+            return response_json
+        else:
+            print(f"Error: {response.status_code}, {response.text}")
+            return None
+    except Exception as error:
+        print(error)
+        
